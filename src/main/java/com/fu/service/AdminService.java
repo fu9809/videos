@@ -14,4 +14,12 @@ public interface AdminService {
      * @return 返回查询到的管理员
      */
     Admin getAdminById(Integer id);
+
+    /**
+     * 管理员登录
+     * @param username  账号
+     * @param password  密码
+     * @return 登录成功返回 admin，失败返回null
+     */
+    Admin login(String username, String password);
 }

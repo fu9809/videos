@@ -1,96 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>登录</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/style.css">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css">
+    <script src="../../static/js/jquery-3.4.1.min.js"></script>
+    <script src="../../static/layui/layui.js"></script>
 
-    <!-- 如果IE版本小于9，加载以下js,解决低版本兼容问题 -->
-    <!--[if lt IE 9]>
-      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <script src="${pageContext.request.contextPath}/js/jquery-1.12.4.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-	  <script>
-		   function validateLogin(){
-		  	   	     var data = $("form").serialize();
-		  	   	     $.post(
-		  	   	        "${pageContext.request.contextPath}/login",data,function (data) {
-                             if(data =='success'){
-                             	//alert("登录成功");
-								 location.href="${pageContext.request.contextPath}/video/list";
-							 }else{
-                             	//alert("用户民密码错误");
-                             	$("#msg").text("用户名密码错误，请检查后输入");
-							 }
-						}
-					 );
+</head>
+<body class="body">
 
-		  	   	     return false;
-		  };
-	  </script>
-  </head>
-  <body>
-     <form >
-     <div style="margin-top: 10%;">
-     	
-     	<img src="images/logo.png" class="img-responsive center-block" style="width: 20%" alt="Responsive image">
-     	
-     	
-     	<div class="container" style="margin-top: 10px;">
-     	
-     	 <div class="row">
-     	 	 <div class="col-md-4"></div>
-     	 	 <div class="form-group col-md-4" style="1px solid #5CB85C">
-		    
-		      <input type="text" class="form-control" name="username" style="border:1px solid #5CB85C" id="exampleInputEmail1" placeholder="用户名">
-		    </div>
-     	 	<div class="col-md-4"></div>
-     	 </div>
-     	 
-     	 <div class="row">
-			<div class="col-md-4"></div>
-			<div class="form-group col-md-4">
+    <div class="login-box">
+        <form id="loginForm" class="layui-form layui-form-pane"
+              action="" method="post">
+            <div class="layui-form-item">
+                <h3>视频学习IT网站后台登录系统</h3>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="accountInput">账号：</label>
+                <div class="layui-input-inline">
+                    <input id="accountInput" type="text" name="username" class="layui-input"
+                           lay-verify="account" placeholder="username"
+                           autocomplete="on" maxlength="20"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="passwordInput">密码：</label>
 
-				<input type="password" class="form-control" name="password" style="border:1px solid #5CB85C" id="exampleInputPassword1" placeholder="密码">
-			</div>
-			<div class="col-md-4"></div>
+                <div class="layui-input-inline">
+                    <input id="passwordInput" type="password" name="password" class="layui-input"
+                           lay-verify="password" placeholder="password" maxlength="20"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="codeInput">验证码：</label>
 
-		</div>
+                <div class="layui-input-inline">
+                    <input id="codeInput" type="number" name="code" class="layui-input"
+                           lay-verify="code" placeholder="验证码"
+                           maxlength="4"/><img src="../../static/img/yzm.jpg" onclick="getImage()" title="单击刷新验证码" id="img_rand_code"
+                                               alt="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button type="reset" class="layui-btn layui-btn-danger btn-reset">重置</button>
+                <button type="submit" class="layui-btn btn-submit" lay-submit="" lay-filter="sub">立即登录</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        layui.use(['form', 'layer'], function () {
+            var $ = layui.jquery,
+					form = layui.form,
+					layer = layui.layer;
+            // 验证
+            form.verify({
+                account: function (value) {
+                    if (value == "") {
+                        return "请输入用户名";
+                    }
+                },
+                password: function (value) {
+                    if (value == "") {
+                        return "请输入密码";
+                    }
+                },
+                code: function (value) {
+                    if (value == "") {
+                        return "请输入验证码";
+                    }
+                }
+            });
+            // 提交监听
+            form.on('submit(sub)', function (data) {
+                /*
+                layer.alert(JSON.stringify(data.field), {
+                    title: '最终的提交信息'
+                });*/
+                $.ajax({
+					type: "POST",
+					url: "/videos/admin/login.do",
+					data: $("#loginForm").serialize(),
+					success: function(result){
+						// console.log(result);
+                        if (result.code === 0) {
+                            window.location.href = "/videos/html/behind/index.html";
+                        } else {
+                            layer.alert(result.data);
+                        }
+					}
+				});
+                return false;
+            })
+        });
 
-			<div class="row">
-				<div class="col-md-4"></div>
-				<div class="form-group col-md-4">
-					 <span id="msg" style="color:darkred"></span>
-				</div>
-				<div class="col-md-4"></div>
-
-			</div>
-     	  
-     		
-     	</div>
-     	
-     	
-     	<div class="row">
-     	 	 <div class="col-md-4"></div>
-     	 	 <div class="col-md-4" >
-		        &nbsp;&nbsp;&nbsp;&nbsp;<button id="loginBtn" type="submit" class="btn btn-success center-block" style="width:80%;" onclick="return validateLogin()"> 登 录 </button>
-		    </div>
-		    <div class="col-md-4"></div>
-     	 	
-     	 </div>
-     	
-     	  
-     </div>
-    </form>
-
-    
-  </body>
+        //刷新验证码
+        function getImage() {
+//  $("#img_rand_code").attr("src", "" + Date());
+            alert("123");
+        }
+    </script>
+</body>
 </html>

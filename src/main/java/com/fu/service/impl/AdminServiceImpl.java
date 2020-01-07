@@ -20,4 +20,13 @@ public class AdminServiceImpl implements AdminService {
     public Admin getAdminById(Integer id) {
         return adminDao.getAdminById(id);
     }
+
+    @Override
+    public Admin login(String username, String password) {
+        Admin admin = adminDao.getAdminByUsername(username);
+        if (!admin.getPassword().equals(password)) {
+            throw new RuntimeException("用户名或密码错误");
+        }
+        return admin;
+    }
 }

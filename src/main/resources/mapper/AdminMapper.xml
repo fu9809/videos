@@ -8,4 +8,8 @@
     <select id="getAdminById" resultType="com.fu.bean.Admin">
         select * from admin where id = #{id}
     </select>
+
+    <select id="getAdminByUsername" resultType="com.fu.bean.Admin">
+        select * from admin where username = #{username}
+    </select>
 </mapper>

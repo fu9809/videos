@@ -15,4 +15,11 @@ public interface AdminDao {
      * @return 返回查询到的管理员
      */
     Admin getAdminById(Integer id);
+
+    /**
+     * 根据账号查询admin，用于登录
+     * @param username 账号
+     * @return 返回查到的数据
+     */
+    Admin getAdminByUsername(String username);
 }
