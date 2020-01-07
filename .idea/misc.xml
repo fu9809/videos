@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
   <component name="GiteeDefaultAccount">
     <option name="defaultAccountId" value="32311ca0-9261-4c4a-a5e2-248a3a71ca82" />
   </component>
