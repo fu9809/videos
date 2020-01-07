@@ -32,7 +32,7 @@ import java.util.List;
 public class WebmvcConfig implements WebMvcConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.jsp("/", ".html");
+        registry.jsp("/html/", ".html");
     }
 
     @Override
