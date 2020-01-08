@@ -25,4 +25,15 @@ public class VideoServiceImpl implements VideoService {
         List<Video> videoList = videoDao.getVideoList();
         return videoList;
     }
+
+    @Override
+    public int addVideo(Video video) {
+        int i = -1;
+        try {
+            i = videoDao.addVideo(video);
+        } catch (Exception e) {
+            throw new RuntimeException("瞎写数据，想让老子数据库炸掉么！！！");
+        }
+        return i;
+    }
 }

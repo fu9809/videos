@@ -17,4 +17,11 @@ public interface VideoService {
      * @return  返回查询到的数据
      */
     List<Video> getVideoList(Integer page, Integer limit);
+
+    /**
+     *  添加视频信息
+     * @param video 视频信息
+     * @return 成功返回 1
+     */
+    int addVideo(Video video);
 }

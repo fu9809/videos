@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class Msg {
-    private Integer code;
+    private Integer code = 0;
     private Object data;
 
     public Msg() {}

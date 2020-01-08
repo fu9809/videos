@@ -1,11 +1,13 @@
 package com.fu.controller;
 
 import com.fu.bean.Video;
+import com.fu.comment.Msg;
 import com.fu.service.VideoService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -35,5 +37,12 @@ public class VideoController {
         map.put("count", pageInfo.getTotal());
         map.put("data", videoList);
         return map;
+    }
+
+    @RequestMapping(value = "/addVideo.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Msg addVideo(Video video) {
+        videoService.addVideo(video);
+        return new Msg();
     }
 }

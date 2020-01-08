@@ -23,4 +23,9 @@
             on v.speaker_id = s.id
 
     </select>
+
+    <insert id="addVideo" parameterType="com.fu.bean.Video">
+        insert into video (title, detail, time, speaker_id, course_id, video_url, image_url, play_num)
+            value(#{title}, #{detail}, #{time}, #{speakerId}, #{courseId}, #{videoUrl}, #{imageUrl}, 0)
+    </insert>
 </mapper>
