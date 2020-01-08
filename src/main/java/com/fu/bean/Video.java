@@ -9,14 +9,15 @@ import lombok.Data;
  */
 @Data
 public class Video {
-    private Integer id;
-    private String title;
-    private String detail;
-    private Integer time;
-    private Integer speakerId;
-    private Integer courseId;
-    private String videoUrl;
-    private String imageUrl;
+    private Integer id;         // id
+    private String title;       // 名称
+    private String detail;      // 详情
+    private Integer time;       // 时长
+    private Integer speakerId;  // 讲师id
+    private Integer courseId;   // 课程编号
+    private String videoUrl;    // 视频网址
+    private String imageUrl;    // 图片网页
+    private Integer playNum;    // 播放次数
 
     private Speaker speaker;
     private Course course;

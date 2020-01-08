@@ -14,15 +14,15 @@
             <div class="layui-logo">视频管理系统</div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href="">控制台</a></li>
-                <li class="layui-nav-item"><a href="">商品管理</a></li>
-                <li class="layui-nav-item"><a href="">用户</a></li>
+                <li class="layui-nav-item"><a href="">视频管理</a></li>
+                <li class="layui-nav-item"><a href="">主讲人管理</a></li>
+                <li class="layui-nav-item"><a href="">课程管理</a></li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">其它系统</a>
+                    <a href="javascript:void(0);">其它系统</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">邮件管理</a></dd>
-                        <dd><a href="">消息管理</a></dd>
-                        <dd><a href="">授权管理</a></dd>
+                        <dd><a href="javascript:void(0);">邮件管理</a></dd>
+                        <dd><a href="javascript:void(0);">消息管理</a></dd>
+                        <dd><a href="javascript:void(0);">授权管理</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -45,23 +45,17 @@
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-                    <li class="layui-nav-item">
-                        <a href="javascript:;">解决方案</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">列表一</a></dd>
-                            <dd><a href="javascript:;">列表二</a></dd>
-                            <dd><a href="">超链接</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item"><a href="">云市场</a></li>
-                    <li class="layui-nav-item"><a href="">发布商品</a></li>
+                    <li class="layui-nav-item"><a href="./videoList.html" target="myIframe">视频管理</a></li>
+                    <li class="layui-nav-item"><a href="" target="myIframe">发布商品</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="layui-body">
+        <div class="layui-body" style="padding: 10px;">
             <!-- 内容主体区域 -->
-            <div style="padding: 15px;">内容主体区域</div>
+            <div style="height: 100%;">
+                <iframe style="width: 100%; height: 100%" frameborder="0" name="myIframe"></iframe>
+            </div>
         </div>
 
         <div class="layui-footer">

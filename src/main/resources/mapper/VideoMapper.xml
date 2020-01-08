@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace: 空间名称 -->
+<mapper namespace="com.fu.dao.VideoDao">
+    <resultMap id="videoListMap" type="com.fu.bean.Video">
+        <id property="id" column="vid"/>
+        <result property="title" column="title"/>
+        <result property="detail" column="detail"/>
+        <result property="time" column="time"/>
+        <result property="speakerId" column="speaker_id"/>
+        <result property="playNum" column="play_num"/>
+        <association property="speaker" javaType="com.fu.bean.Speaker">
+            <id property="id" column="sid"/>
+            <result property="speakerName" column="speaker_name"/>
+        </association>
+    </resultMap>
+
+    <select id="getVideoList" resultMap="videoListMap">
+        select v.id vid, v.title, v.detail, v.time, v.time, s.id sid, s.speaker_name
+            from video v left join speaker s
+            on v.speaker_id = s.id
+
+    </select>
+</mapper>

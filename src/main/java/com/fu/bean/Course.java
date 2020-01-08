@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 public class Course {
     private Integer id;
-    private String courseTitle;
-    private String courseDesc;
-    private Integer subjectId;
+    private String courseTitle;     // 课程名称
+    private String courseDesc;      // 课程说明
+    private Integer subjectId;      // 学科id
 
     private Subject subject;
 }
