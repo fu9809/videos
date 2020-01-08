@@ -97,9 +97,10 @@
 
     <script type="text/javascript">
         var currPage = 0;
-        layui.use(['table', 'form'], function () {
+        layui.use(['table', 'form', 'jquery'], function () {
             var table = layui.table,
-                form = layui.form;
+                form = layui.form,
+                $ = layui.$;
 
             table.render({
                 elem: '#videosList'
@@ -249,9 +250,8 @@
                                 })
                             }
                         });
-
                         break;
-                    case 'batchDel':
+                    case 'batchDel':    // 批量删除
                         var data = checkStatus.data;
                         var ids = "";
                         $.each(data, function (i, item) {
@@ -287,26 +287,28 @@
                 }
             });
 
-        });
-        function deleteVideo(ids) {
-            $.ajax({
-                type: "DELETE",
-                url: "/videos/video/delete.do",
-                data: "ids=" + ids,
-                success: function (result) {
-                    if (result.code === 0) {
-                        layer.msg("删除成功");
-                        table.reload('videosList', {
-                            page: {
-                                curr: currPage
-                            }
-                        });
-                    } else {
-                        layer.alert(result.data);
+            function deleteVideo(ids) {
+                console.log(ids);
+                $.ajax({
+                    type: "DELETE",
+                    url: "/videos/video/delete.do/" + ids,
+                    success: function (result) {
+                        if (result.code === 0) {
+                            layer.msg("成功删除 " + result.data + " 条数据");
+                            table.reload('videosList', {
+                                page: {
+                                    curr: currPage
+                                }
+                            });
+                        } else {
+                            layer.alert(result.data);
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
+
+        });
+
     </script>
 </body>
 </html>

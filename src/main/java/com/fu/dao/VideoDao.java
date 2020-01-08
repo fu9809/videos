@@ -21,4 +21,11 @@ public interface VideoDao {
      * @return 成功返回 1
      */
     int addVideo(Video video);
+
+    /**
+     * 删除、批量删除
+     * @param idArr 视频的id
+     * @return  返回操作成功的条数
+     */
+    int delete(String[] idArr);
 }

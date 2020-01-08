@@ -6,9 +6,7 @@ import com.fu.service.VideoService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +24,7 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
-    @RequestMapping("/list.do")
+    @GetMapping("/list.do")
     @ResponseBody
     public Map<String, Object> videoList(Integer page, Integer limit) {
         List<Video> videoList = videoService.getVideoList(page, limit);
@@ -39,10 +37,18 @@ public class VideoController {
         return map;
     }
 
-    @RequestMapping(value = "/addVideo.do", method = RequestMethod.POST)
+    @PostMapping("/addVideo.do")
     @ResponseBody
     public Msg addVideo(Video video) {
         videoService.addVideo(video);
         return new Msg();
+    }
+
+    @DeleteMapping("/delete.do/{ids}")
+    @ResponseBody
+    public Msg delete(@PathVariable("ids") String ids) {
+        String[] idArr = ids.split(",");
+        int num = videoService.delete(idArr);
+        return new Msg(0, num);
     }
 }

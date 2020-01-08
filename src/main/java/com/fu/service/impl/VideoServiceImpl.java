@@ -36,4 +36,15 @@ public class VideoServiceImpl implements VideoService {
         }
         return i;
     }
+
+    @Override
+    public int delete(String[] idArr) {
+        int num = -1;
+        try {
+           num = videoDao.delete(idArr);
+        } catch (Exception e) {
+            throw new RuntimeException("你传入的数据有毛病吧，一条都没删除成功");
+        }
+        return num;
+    }
 }

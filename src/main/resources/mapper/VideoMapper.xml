@@ -28,4 +28,11 @@
         insert into video (title, detail, time, speaker_id, course_id, video_url, image_url, play_num)
             value(#{title}, #{detail}, #{time}, #{speakerId}, #{courseId}, #{videoUrl}, #{imageUrl}, 0)
     </insert>
+
+    <delete id="delete">
+        delete from video where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>
