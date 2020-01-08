@@ -2,11 +2,15 @@ package com.fu.config;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.FormContentFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import java.util.EnumSet;
 
 /**
  * web根容器配置类
@@ -22,10 +26,16 @@ public class RootConfig implements WebApplicationInitializer {
 
         // 配置dispatcherServlet，添加web容器的配置
         DispatcherServlet dispatcherServlet = new DispatcherServlet(ac);
+//        hiddenHttpMethodFilter.
         ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcherServlet", dispatcherServlet);
         // 容器启动的时候加载该servlet
         servlet.setLoadOnStartup(1);
         // 配置dispatcherServlet的映射路径
         servlet.addMapping("/");
+        // 配置支持 PUT、DELETE 提交方式
+        servletContext.addFilter("HiddenHttpMethodFilter", new HiddenHttpMethodFilter())
+                .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        servletContext.addFilter("FormContentFilter", FormContentFilter.class)
+                .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
     }
 }

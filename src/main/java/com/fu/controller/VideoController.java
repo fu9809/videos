@@ -40,8 +40,12 @@ public class VideoController {
     @PostMapping("/addVideo.do")
     @ResponseBody
     public Msg addVideo(Video video) {
-        videoService.addVideo(video);
-        return new Msg();
+        int num = videoService.addVideo(video);
+        if (num > 0) {
+            return new Msg(0, num);
+        } else {
+            return new Msg(1, "瞎写数据，想让老子数据库炸掉么！！！");
+        }
     }
 
     @DeleteMapping("/delete.do/{ids}")
@@ -49,6 +53,32 @@ public class VideoController {
     public Msg delete(@PathVariable("ids") String ids) {
         String[] idArr = ids.split(",");
         int num = videoService.delete(idArr);
-        return new Msg(0, num);
+        if (num > 0) {
+            return new Msg(0, num);
+        } else {
+            return new Msg(1, "你传入的数据有毛病吧，一条都没删除成功");
+        }
+    }
+
+    @GetMapping("/getVideoById.do/{id}")
+    @ResponseBody
+    public Msg getVideoById(@PathVariable("id") String id) {
+        Video video = videoService.getVideoById(id);
+        if (video != null) {
+            return new Msg(0, video);
+        } else {
+            return new Msg(1, "出错啦，好像没有该条信息");
+        }
+    }
+
+    @PutMapping("/updateVideo.do")
+    @ResponseBody
+    public Msg updateVideo(Video video) {
+        int num = videoService.updateVideo(video);
+        if (num > 0) {
+            return new Msg(0, num);
+        } else {
+            return new Msg(1, "你确定你输入的东西合法？？？");
+        }
     }
 }

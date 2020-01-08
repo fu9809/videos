@@ -35,4 +35,36 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="getVideoById" resultType="com.fu.bean.Video">
+        select * from video where id = #{id}
+    </select>
+
+    <update id="updateVideo" parameterType="com.fu.bean.Video">
+        update video
+        <set>
+            <if test="#{title} != null">
+                title = #{title},
+            </if>
+            <if test="#{speakerId} != null">
+                speaker_id = #{speakerId},
+            </if>
+            <if test="#{courseId} != null">
+                course_id = #{courseId},
+            </if>
+            <if test="#{time} != null">
+                time = #{time},
+            </if>
+            <if test="#{imageUrl} != null">
+                image_url = #{imageUrl},
+            </if>
+            <if test="#{videoUrl} != null">
+                video_url = #{videoUrl},
+            </if>
+            <if test="#{detail} != null">
+                detail = #{detail}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

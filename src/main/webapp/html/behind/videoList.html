@@ -17,6 +17,10 @@
         #addVideoForm label {
             width: 110px;
         }
+
+        #editVideoForm label {
+            width: 110px;
+        }
     </style>
 </head>
 <body>
@@ -40,6 +44,7 @@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
     </script>
 
+    <!--  新增视频信息  -->
     <form style="display: none" id="addVideoForm" class="layui-form input-sm" action="" lay-filter="addVideoForm">
         <div class="layui-form-item">
             <label class="layui-form-label">名称</label>
@@ -51,8 +56,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">教师名字</label>
             <div class="layui-input-block">
-                <select name="speakerId" lay-verify="required" lay-search id="speakerSelect">
-                    <option value="">请选择</option>
+                <select name="speakerId" lay-verify="required" lay-search id="speakerSelectAdd">
+
                 </select>
             </div>
         </div>
@@ -60,8 +65,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">所属课程</label>
             <div class="layui-input-block">
-                <select name="courseId" lay-verify="required" lay-search id="courseSelect">
-                    <option value="">请选择</option>
+                <select name="courseId" lay-verify="required" lay-search id="courseSelectAdd">
                 </select>
             </div>
         </div>
@@ -95,7 +99,66 @@
         <button id="addVideoBut" style="display: none" lay-submit lay-filter="addVideoBut"></button>
     </form>
 
+    <!--  更新视频信息  -->
+    <form style="display: none" id="editVideoForm" class="layui-form input-sm" action="" lay-filter="editVideoForm">
+        <input type="hidden" name="id" id="idInputEdit" autocomplete="off">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" lay-verify="required" placeholder="视频名称"
+                       class="layui-input" autocomplete="off" id="titleInputEdit">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">教师名字</label>
+            <div class="layui-input-block">
+                <select name="speakerId" lay-verify="required" lay-search id="speakerSelectEdit">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属课程</label>
+            <div class="layui-input-block">
+                <select name="courseId" lay-verify="required" lay-search id="courseSelectEdit">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">时长</label>
+            <div class="layui-input-block">
+                <input type="text" name="time" lay-verify="required|number" placeholder="精确到秒(正整数)"
+                       class="layui-input" autocomplete="off" id="timeInputEdit">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">封面图片地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="imageUrl" lay-verify="required|url" placeholder="具体的url"
+                       class="layui-input" autocomplete="off" id="imageUrlInputEdit">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">视频播放地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="videoUrl" lay-verify="required|url" placeholder="具体的url"
+                       class="layui-input" autocomplete="off" id="videoUrlInputEdit">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" name="detail" lay-verify="required"
+                       class="layui-input" autocomplete="off" id="detailInputEdit">
+            </div>
+        </div>
+        <button id="editVideoBut" style="display: none" lay-submit lay-filter="editVideoBut"></button>
+    </form>
+
     <script type="text/javascript">
+        var videoTotal = 0;
         var currPage = 0;
         layui.use(['table', 'form', 'jquery'], function () {
             var table = layui.table,
@@ -143,8 +206,9 @@
                 ]]
                 , done: function (res, curr, count) {   // 数据渲染完的回调
                     //如果是异步请求数据方式，res即为你接口返回的信息。
-                    currPage = count;
-                    // count为数据总量
+                    currPage = curr;
+                    videoTotal = count;
+                    // count 为数据总量
                     // curr 当前页码
                 }
                 , page: true //开启分页
@@ -153,6 +217,7 @@
             });
 
             // 表单提交的监听事件，用于表单字段验证
+            // 监听新增视频信息的事件
             form.on('submit(addVideoBut)', function (data) {
                 // console.log(data);
                 $.ajax({
@@ -161,7 +226,31 @@
                     data: data.field,
                     success: function (result) {
                         if (result.code === 0) {
-                            layer.msg("添加成功");
+                            layer.msg("成功添加 " + result.data + " 条数据");
+                            layer.closeAll('page');
+                            $("#addVideoForm")[0].reset();
+                            table.reload('videosList', {
+                                page: {
+                                    curr: videoTotal
+                                }
+                            });
+                        } else {
+                            layer.alert(result.data);
+                        }
+                    }
+                });
+                return false;
+            });
+            // 监听更新视频信息的事件
+            form.on('submit(editVideoBut)', function (data) {
+                // console.log(data);
+                $.ajax({
+                    type: "PUT",
+                    url: "/videos/video/updateVideo.do/",
+                    data: data.field,
+                    success: function (result) {
+                        if (result.code === 0) {
+                            layer.msg(result.data + " 条数据被修改了");
                             layer.closeAll('page');
                             $("#addVideoForm")[0].reset();
                             table.reload('videosList', {
@@ -221,11 +310,12 @@
                                     url: "/videos/speaker/speakerList.do",
                                     success: function (result) {
                                         var html = '';
+                                        $("#speakerSelectAdd").html('<option value="">请选择</option>');
                                         if (result.code === 0) {
                                             $.each(result.data, function (i, item) {
                                                 html += '<option value="' + item.id + '">' + item.speakerName + '</option>';
                                             });
-                                            $("#speakerSelect").append(html);
+                                            $("#speakerSelectAdd").append(html);
                                         } else {
                                             layui.msg(result.data);
                                         }
@@ -237,11 +327,12 @@
                                     url: "/videos/course/courseList.do",
                                     success: function (result) {
                                         var html = '';
+                                        $("#courseSelectAdd").html('<option value="">请选择</option>');
                                         if (result.code === 0) {
                                             $.each(result.data, function (i, item) {
                                                 html += '<option value="' + item.id + '">' + item.courseTitle + '</option>';
                                             });
-                                            $("#courseSelect").append(html);
+                                            $("#courseSelectAdd").append(html);
                                         } else {
                                             layui.msg(result.data);
                                         }
@@ -275,26 +366,94 @@
                         deleteVideo(data.id);
                     });
                 } else if (obj.event === 'edit') {
-                    layer.prompt({
-                        formType: 2
-                        , value: data.email
-                    }, function (value, index) {
-                        obj.update({
-                            email: value
-                        });
-                        layer.close(index);
+                    // 更新视频信息弹窗
+                    layer.open({
+                        // layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        type: 1
+                        , id: "editVideo" // 设置该值后，不管是什么类型的层，都只允许同时弹出一个。
+                        , title: '修改视频信息'
+                        , shade: 0.3 // 遮罩，默认为 [0.3, '#000']
+                        , area: ['720px', '520px']
+                        , offset: '100px'   // 偏移量，此处代表 top:100px
+                        // ,maxmin: true   // 最大最小化。默认为false
+                        , content: $("#editVideoForm")
+                        , btn: ['更新', '取消']
+                        , yes: function () {   // 按钮一(添加按钮) 的回调
+                            // layer.msg("添加");
+                            $("#editVideoBut").click();
+                        }
+                        , btn2: function () {  // 按钮二(取消按钮) 的回调
+                            layer.close();
+                        }
+                        , resize: false // 是否允许拉伸，默认为true
+                        , zIndex: layer.zIndex // 层叠顺序，一般用于解决和其它组件的层叠冲突。
+                        , success: function (layero, index) {// 弹出成功的回调方法
+                            // console.log(layero, index);
+                            // console.log(data.id);
+                            $.ajax({
+                                type: "get",
+                                url: "/videos/speaker/speakerList.do",
+                                success: function (result) {
+                                    var html = '';
+                                    $("#speakerSelectEdit").html('');
+                                    if (result.code === 0) {
+                                        $.each(result.data, function (i, item) {
+                                            html += '<option value="' + item.id + '">' + item.speakerName + '</option>';
+                                        });
+                                        $("#speakerSelectEdit").append(html);
+                                    } else {
+                                        layui.msg(result.data);
+                                    }
+                                    form.render('select');
+                                }
+                            });
+                            $.ajax({
+                                type: "get",
+                                url: "/videos/course/courseList.do",
+                                success: function (result) {
+                                    var html = '';
+                                    $("#courseSelectEdit").html('');
+                                    if (result.code === 0) {
+                                        $.each(result.data, function (i, item) {
+                                            html += '<option value="' + item.id + '">' + item.courseTitle + '</option>';
+                                        });
+                                        $("#courseSelectEdit").append(html);
+                                    } else {
+                                        layui.msg(result.data);
+                                    }
+                                    form.render('select');
+                                }
+                            });
+                            $.ajax({
+                                type: "GET",
+                                url: "/videos/video/getVideoById.do/" + data.id,
+                                success: function (result) {
+                                    // console.log(result);
+                                    var data = result.data;
+                                    $("#idInputEdit").val(data.id);
+                                    $("#titleInputEdit").val(data.title);
+                                    $("#speakerSelectEdit").val(data.speakerId);
+                                    $("#courseSelectEdit").val(data.courseId);
+                                    $("#timeInputEdit").val(data.time);
+                                    $("#imageUrlInputEdit").val(data.imageUrl);
+                                    $("#videoUrlInputEdit").val(data.videoUrl);
+                                    $("#detailInputEdit").val(data.detail);
+                                }
+                            });
+                        }
                     });
                 }
             });
 
+            // 删除数据方法
             function deleteVideo(ids) {
-                console.log(ids);
+                // console.log(ids);
                 $.ajax({
                     type: "DELETE",
                     url: "/videos/video/delete.do/" + ids,
                     success: function (result) {
                         if (result.code === 0) {
-                            layer.msg("成功删除 " + result.data + " 条数据");
+                            layer.msg("您失去了 " + result.data + " 条珍贵的数据");
                             table.reload('videosList', {
                                 page: {
                                     curr: currPage

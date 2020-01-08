@@ -28,23 +28,21 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public int addVideo(Video video) {
-        int i = -1;
-        try {
-            i = videoDao.addVideo(video);
-        } catch (Exception e) {
-            throw new RuntimeException("瞎写数据，想让老子数据库炸掉么！！！");
-        }
-        return i;
+        return videoDao.addVideo(video);
     }
 
     @Override
     public int delete(String[] idArr) {
-        int num = -1;
-        try {
-           num = videoDao.delete(idArr);
-        } catch (Exception e) {
-            throw new RuntimeException("你传入的数据有毛病吧，一条都没删除成功");
-        }
-        return num;
+        return videoDao.delete(idArr);
+    }
+
+    @Override
+    public Video getVideoById(String id) {
+        return videoDao.getVideoById(id);
+    }
+
+    @Override
+    public int updateVideo(Video video) {
+        return videoDao.updateVideo(video);
     }
 }
