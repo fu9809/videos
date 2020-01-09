@@ -20,10 +20,12 @@ public class VideoServiceImpl implements VideoService {
     private VideoDao videoDao;
 
     @Override
-    public List<Video> getVideoList(Integer page, Integer limit) {
+    public List<Video> getVideoList(Integer page, Integer limit, String title, String courseId, String speakerId) {
+        if (title != null) {
+            title = title.trim();
+        }
         PageHelper.startPage(page, limit);
-        List<Video> videoList = videoDao.getVideoList();
-        return videoList;
+        return videoDao.getVideoList(title, courseId, speakerId);
     }
 
     @Override
@@ -45,4 +47,5 @@ public class VideoServiceImpl implements VideoService {
     public int updateVideo(Video video) {
         return videoDao.updateVideo(video);
     }
+
 }

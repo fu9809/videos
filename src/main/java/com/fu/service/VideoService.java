@@ -11,12 +11,15 @@ import java.util.List;
  */
 public interface VideoService {
     /**
-     * 查询视频列表，分页
+     * 查全部，模糊查询，分页
+     * @param title 视频名称
+     * @param courseId 所属课程id
+     * @param speakerId 讲师id
      * @param page  当前页数
      * @param limit 每页数据条数
      * @return  返回查询到的数据
      */
-    List<Video> getVideoList(Integer page, Integer limit);
+    List<Video> getVideoList(Integer page, Integer limit, String title, String courseId, String speakerId);
 
     /**
      *  添加视频信息
@@ -45,4 +48,5 @@ public interface VideoService {
      * @return 返回更新成功的条数
      */
     int updateVideo(Video video);
+
 }

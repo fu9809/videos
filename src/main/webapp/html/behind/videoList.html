@@ -21,6 +21,14 @@
         #editVideoForm label {
             width: 110px;
         }
+
+        #likeVideoForm label {
+            margin: 0;
+        }
+
+        #likeVideoForm input, select {
+            height: 30px;
+        }
     </style>
 </head>
 <body>
@@ -30,6 +38,7 @@
         </div>
     </div>
     <table class="layui-hide" id="videosList" lay-filter="videosList"></table>
+    <!--  头部工具栏  -->
     <script type="text/html" id="toolbarDemo">
         <div class="layui-elem-field site-demo-button">
             <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
@@ -37,13 +46,40 @@
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-event="addVideo">新增视频</button>
             <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchDel">批量删除</button>
         </div>
+        <form action="" id="likeVideoForm" lay-filter="likeVideoForm">
+            <div class="layui-inline">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="title" class="layui-input" lay-filter="titleInputLike" id="titleInputLike">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">课程</label>
+                <div class="layui-input-inline">
+                    <select name="courseId" lay-search id="courseSelectLike" lay-filter="courseSelectLike">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">讲师</label>
+                <div class="layui-input-inline">
+                    <select name="speakerId" lay-search id="speakerSelectLike" lay-filter="speakerSelectLike">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <button style="margin-left: 15px; height: 30px" class="layui-btn layui-btn-sm search_btn"
+                    id="searchFor" data-type="reload">查询</button>
+        </form>
+
     </script>
 
+    <!--  行内工具栏  -->
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
     </script>
-
 
     <!--  新增视频信息  -->
     <form style="display: none" id="addVideoForm" class="layui-form input-sm" action="" lay-filter="addVideoForm">
@@ -99,7 +135,6 @@
         </div>
         <button id="addVideoBut" style="display: none" lay-submit lay-filter="addVideoBut"></button>
     </form>
-
 
     <!--  更新视频信息  -->
     <form style="display: none" id="editVideoForm" class="layui-form input-sm" action="" lay-filter="editVideoForm">
@@ -162,14 +197,17 @@
     <script type="text/javascript">
         var videoTotal = 0;
         var currPage = 0;
-        layui.use(['table', 'form', 'jquery'], function () {
-            var table = layui.table,
+        layui.use(['laypage', 'layer', 'table', 'form', 'jquery'], function () {
+            var laypage = layui.laypage,
+                layer = layui.layer,
+                table = layui.table,
                 form = layui.form,
                 $ = layui.$;
 
             // 初始化table数据表格
             table.render({
                 elem: '#videosList'
+                , id: 'videosList'
                 , url: '/videos/video/list.do'
                 , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 , defaultToolbar: ['filter', 'exports', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
@@ -187,6 +225,12 @@
                         field: 'speakerName', title: '讲师', width: 100
                         , templet: function (rel) {
                             return (rel.speaker) ? '<span>' + rel.speaker.speakerName + '</span>' : '<span></span>';
+                        }
+                    }
+                    , {
+                        field: 'courseTitle', title: '课程信息', width: 100
+                        , templet: function (rel) {
+                            return (rel.course) ? '<span>' + rel.course.courseTitle + '</span>' : '<span></span>';
                         }
                     }
                     , {
@@ -213,6 +257,9 @@
                     videoTotal = count;
                     // count 为数据总量
                     // curr 当前页码
+
+                    showSpeakerSelect($("#speakerSelectLike"));
+                    showCourseSelect($("#courseSelectLike"));
                 }
                 , page: true //开启分页
                 , limits: [5, 10, 20]
@@ -270,15 +317,52 @@
                 return false;
             });
 
+            // // 监听下拉选择事件
+            // form.on('select(courseSelectLike)', function (data) {
+            //     // console.log(data);
+            //     getVideoLike();
+            // });
+            // form.on('select(speakerSelectLike)', function (data) {
+            //     // console.log(data);
+            //     getVideoLike();
+            // });
+            // // 监听输入框修改
+            // var timer;
+            // $('#titleInputLike').on('keyup', function (obj) {
+            //     if (timer) {
+            //         // 如果定时器存在，就把它清空
+            //         clearTimeout(timer);
+            //     }
+            //     timer = setTimeout(function () {
+            //         // console.log($('#titleInputLike').val());
+            //         getVideoLike();
+            //     }, 1000);
+            // });
+
+            // 执行模糊查询事件
+            $('#searchFor').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            $ = layui.jquery, active = {
+                reload: function () {
+                    var title = $("#titleInputLike").val();
+                    var courseId = $("#courseSelectLike option:selected").val();
+                    var speakerId = $("#speakerSelectLike option:selected").val();
+                    table.reload('videosList', {
+                        page:{
+                            curr:1
+                        },
+                        where: {page: 1, title: title, speakerId: speakerId, courseId: courseId}
+                    });
+                }
+            };
 
             //头工具栏事件
             table.on('toolbar(videosList)', function (obj) {
                 var checkStatus = table.checkStatus(obj.config.id);
                 switch (obj.event) {
-                    case 'getCheckData':
-                        var data = checkStatus.data;
-                        layer.alert(JSON.stringify(data));
-                        break;
                     case 'getCheckLength':
                         var data = checkStatus.data;
                         layer.msg('选中了：' + data.length + ' 个');
@@ -310,40 +394,8 @@
                             , zIndex: layer.zIndex // 层叠顺序，一般用于解决和其它组件的层叠冲突。
                             , success: function (layero, index) {// 弹出成功的回调方法
                                 // console.log(layero, index);
-                                $.ajax({
-                                    type: "get",
-                                    url: "/videos/speaker/speakerList.do",
-                                    success: function (result) {
-                                        var html = '';
-                                        $("#speakerSelectAdd").html('<option value="">请选择</option>');
-                                        if (result.code === 0) {
-                                            $.each(result.data, function (i, item) {
-                                                html += '<option value="' + item.id + '">' + item.speakerName + '</option>';
-                                            });
-                                            $("#speakerSelectAdd").append(html);
-                                        } else {
-                                            layui.msg(result.data);
-                                        }
-                                        form.render('select');
-                                    }
-                                });
-                                $.ajax({
-                                    type: "get",
-                                    url: "/videos/course/courseList.do",
-                                    success: function (result) {
-                                        var html = '';
-                                        $("#courseSelectAdd").html('<option value="">请选择</option>');
-                                        if (result.code === 0) {
-                                            $.each(result.data, function (i, item) {
-                                                html += '<option value="' + item.id + '">' + item.courseTitle + '</option>';
-                                            });
-                                            $("#courseSelectAdd").append(html);
-                                        } else {
-                                            layui.msg(result.data);
-                                        }
-                                        form.render('select');
-                                    }
-                                })
+                                showSpeakerSelect($("#speakerSelectAdd"));
+                                showCourseSelect($("#courseSelectAdd"));
                             }
                         });
                         break;
@@ -400,41 +452,10 @@
                             // console.log(layero, index);
                             // console.log(data.id);
                             // 主讲人列表
-                            $.ajax({
-                                type: "get",
-                                url: "/videos/speaker/speakerList.do",
-                                success: function (result) {
-                                    var html = '';
-                                    $("#speakerSelectEdit").html('');
-                                    if (result.code === 0) {
-                                        $.each(result.data, function (i, item) {
-                                            html += '<option value="' + item.id + '">' + item.speakerName + '</option>';
-                                        });
-                                        $("#speakerSelectEdit").append(html);
-                                    } else {
-                                        layui.msg(result.data);
-                                    }
-                                    form.render('select');
-                                }
-                            });
+                            showSpeakerSelect($("#speakerSelectAdd"));
                             // 课程列表
-                            $.ajax({
-                                type: "get",
-                                url: "/videos/course/courseList.do",
-                                success: function (result) {
-                                    var html = '';
-                                    $("#courseSelectEdit").html('');
-                                    if (result.code === 0) {
-                                        $.each(result.data, function (i, item) {
-                                            html += '<option value="' + item.id + '">' + item.courseTitle + '</option>';
-                                        });
-                                        $("#courseSelectEdit").append(html);
-                                    } else {
-                                        layui.msg(result.data);
-                                    }
-                                    form.render('select');
-                                }
-                            });
+                            showCourseSelect($("#courseSelectAdd"));
+
                             // 获取要修改的数据回显
                             $.ajax({
                                 type: "GET",
@@ -457,6 +478,47 @@
                 }
             });
 
+            // 渲染主讲人下拉列表
+            function showSpeakerSelect(ele) {
+                $.ajax({
+                    type: "get",
+                    url: "/videos/speaker/speakerList.do",
+                    success: function (result) {
+                        var html = '';
+                        ele.html('<option value="">请选择</option>');
+                        if (result.code === 0) {
+                            $.each(result.data, function (i, item) {
+                                html += '<option value="' + item.id + '">' + item.speakerName + '</option>';
+                            });
+                            ele.append(html);
+                        } else {
+                            layui.msg(result.data);
+                        }
+                        form.render('select');
+                    }
+                });
+            }
+
+            // 渲染课程信息下拉列表
+            function showCourseSelect(ele) {
+                $.ajax({
+                    type: "get",
+                    url: "/videos/course/courseList.do",
+                    success: function (result) {
+                        var html = '';
+                        ele.html('<option value="">请选择</option>');
+                        if (result.code === 0) {
+                            $.each(result.data, function (i, item) {
+                                html += '<option value="' + item.id + '">' + item.courseTitle + '</option>';
+                            });
+                            ele.append(html);
+                        } else {
+                            layui.msg(result.data);
+                        }
+                        form.render('select');
+                    }
+                });
+            }
 
             // 删除数据方法
             function deleteVideo(ids) {

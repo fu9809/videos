@@ -15,13 +15,32 @@
             <id property="id" column="sid"/>
             <result property="speakerName" column="speaker_name"/>
         </association>
+        <association property="course" javaType="com.fu.bean.Course">
+            <id property="id" column="cid"/>
+            <result property="courseTitle" column="course_title"/>
+        </association>
     </resultMap>
 
     <select id="getVideoList" resultMap="videoListMap">
-        select v.id vid, v.title, v.detail, v.time, v.time, s.id sid, s.speaker_name
+        <if test="title != null">
+            <bind name="titleBind" value="'%' + title + '%'" />
+        </if>
+        select v.id vid, v.title, v.detail, v.time, v.speaker_id, s.id sid, s.speaker_name, c.id cid, c.course_title
             from video v left join speaker s
-            on v.speaker_id = s.id
-
+                on v.speaker_id = s.id
+            left join course c
+                on v.course_id = c.id
+            <where>
+                <if test="title != null and title != '' ">
+                    v.title like #{titleBind}
+                </if>
+                <if test="courseId != null and courseId != '' ">
+                    AND v.course_id = #{courseId}
+                </if>
+                <if test="speakerId != null and speakerId != '' ">
+                    AND v.speaker_id = #{speakerId}
+                </if>
+            </where>
     </select>
 
     <insert id="addVideo" parameterType="com.fu.bean.Video">
@@ -36,35 +55,38 @@
         </foreach>
     </delete>
 
-    <select id="getVideoById" resultType="com.fu.bean.Video">
-        select * from video where id = #{id}
-    </select>
-
     <update id="updateVideo" parameterType="com.fu.bean.Video">
         update video
         <set>
-            <if test="#{title} != null">
+            <if test="title != null">
                 title = #{title},
             </if>
-            <if test="#{speakerId} != null">
+            <if test="speakerId != null">
                 speaker_id = #{speakerId},
             </if>
-            <if test="#{courseId} != null">
+            <if test="courseId != null">
                 course_id = #{courseId},
             </if>
-            <if test="#{time} != null">
+            <if test="time != null">
                 time = #{time},
             </if>
-            <if test="#{imageUrl} != null">
+            <if test="imageUrl != null">
                 image_url = #{imageUrl},
             </if>
-            <if test="#{videoUrl} != null">
+            <if test="videoUrl != null">
                 video_url = #{videoUrl},
             </if>
-            <if test="#{detail} != null">
+            <if test="detail != null">
                 detail = #{detail}
             </if>
         </set>
         where id = #{id}
     </update>
+
+    <select id="getVideoById" resultType="com.fu.bean.Video">
+        select * from video where id = #{id}
+    </select>
+
+
+
 </mapper>

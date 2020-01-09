@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * 视频控制器
+ *
  * @Author Administrator
  * @Date 2020/1/7 22:30
  */
@@ -26,8 +27,8 @@ public class VideoController {
 
     @GetMapping("/list.do")
     @ResponseBody
-    public Map<String, Object> videoList(Integer page, Integer limit) {
-        List<Video> videoList = videoService.getVideoList(page, limit);
+    public Map<String, Object> videoList(Integer page, Integer limit, String title, String courseId, String speakerId) {
+        List<Video> videoList = videoService.getVideoList(page, limit, title, courseId, speakerId);
         PageInfo<Video> pageInfo = PageInfo.of(videoList);
         Map<String, Object> map = new HashMap<>(4);
         map.put("code", "0");
@@ -81,4 +82,11 @@ public class VideoController {
             return new Msg(1, "你确定你输入的东西合法？？？");
         }
     }
+
+//    @GetMapping("/getVideoLike.do")
+//    @ResponseBody
+//    public Msg getVideoLike() {
+//        List<Video> videoList = videoService.getVideoLike(title, courseId, speakerId);
+//        return new Msg(0, videoList);
+//    }
 }
