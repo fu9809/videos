@@ -44,6 +44,7 @@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
     </script>
 
+
     <!--  新增视频信息  -->
     <form style="display: none" id="addVideoForm" class="layui-form input-sm" action="" lay-filter="addVideoForm">
         <div class="layui-form-item">
@@ -98,6 +99,7 @@
         </div>
         <button id="addVideoBut" style="display: none" lay-submit lay-filter="addVideoBut"></button>
     </form>
+
 
     <!--  更新视频信息  -->
     <form style="display: none" id="editVideoForm" class="layui-form input-sm" action="" lay-filter="editVideoForm">
@@ -165,6 +167,7 @@
                 form = layui.form,
                 $ = layui.$;
 
+            // 初始化table数据表格
             table.render({
                 elem: '#videosList'
                 , url: '/videos/video/list.do'
@@ -177,7 +180,7 @@
                 , title: '用户数据表'
                 , cols: [[
                     {type: 'checkbox', fixed: 'left'}
-                    , {field: 'id', title: '序号', width: 80, fixed: 'left', unresize: true, sort: true}
+                    , {field: 'id', title: '序号', width: 100, fixed: 'left', unresize: true, sort: true}
                     , {field: 'title', title: '名称', width: 120}
                     , {field: 'detail', title: '简介', width: 300}
                     , {
@@ -215,6 +218,7 @@
                 , limits: [5, 10, 20]
                 , limit: 10
             });
+
 
             // 表单提交的监听事件，用于表单字段验证
             // 监听新增视频信息的事件
@@ -265,6 +269,7 @@
                 });
                 return false;
             });
+
 
             //头工具栏事件
             table.on('toolbar(videosList)', function (obj) {
@@ -344,16 +349,20 @@
                         break;
                     case 'batchDel':    // 批量删除
                         var data = checkStatus.data;
-                        var ids = "";
-                        $.each(data, function (i, item) {
-                            if (i === (data.length - 1)) {
-                                ids += item.id;
-                            } else {
-                                ids += (item.id + ",");
-                            }
-                        });
-                        // layer.msg("批量删除:" + "[" + ids + "]");
-                        deleteVideo(ids);
+                        if (data.length > 0) {
+                            var ids = "";
+                            $.each(data, function (i, item) {
+                                if (i === (data.length - 1)) {
+                                    ids += item.id;
+                                } else {
+                                    ids += (item.id + ",");
+                                }
+                            });
+                            // layer.msg("批量删除:" + "[" + ids + "]");
+                            deleteVideo(ids);
+                        } else {
+                            layer.msg("请先选择要删除的选项");
+                        }
                         break;
                 }
             });
@@ -390,6 +399,7 @@
                         , success: function (layero, index) {// 弹出成功的回调方法
                             // console.log(layero, index);
                             // console.log(data.id);
+                            // 主讲人列表
                             $.ajax({
                                 type: "get",
                                 url: "/videos/speaker/speakerList.do",
@@ -407,6 +417,7 @@
                                     form.render('select');
                                 }
                             });
+                            // 课程列表
                             $.ajax({
                                 type: "get",
                                 url: "/videos/course/courseList.do",
@@ -424,6 +435,7 @@
                                     form.render('select');
                                 }
                             });
+                            // 获取要修改的数据回显
                             $.ajax({
                                 type: "GET",
                                 url: "/videos/video/getVideoById.do/" + data.id,
@@ -445,6 +457,7 @@
                 }
             });
 
+
             // 删除数据方法
             function deleteVideo(ids) {
                 // console.log(ids);
@@ -465,7 +478,6 @@
                     }
                 });
             }
-
         });
 
     </script>

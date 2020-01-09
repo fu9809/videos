@@ -64,11 +64,22 @@
         </div>
     </div>
     <script>
-        //JavaScript代码区域
-        layui.use('element', function(){
-            var element = layui.element;
-
+        $(function () {
+            verifyLogin();
         });
+        function verifyLogin() {
+            $.ajax({
+                type: "GET",
+                url: "/videos/admin/verifyLogin.do",
+                async: false,
+                success: function(result) {
+                    // console.log(result);
+                    if (result.code !== 0) {
+                        window.location.href = "/videos/html/behind/login.html";
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
