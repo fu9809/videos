@@ -18,7 +18,7 @@
         <form id="loginForm" class="layui-form layui-form-pane"
               action="" method="post">
             <div class="layui-form-item">
-                <h3>视频学习IT网站后台登录系统</h3>
+                <h2 style="text-align: center">视频学习IT网站后台登录系统</h2>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" for="accountInput">账号：</label>
@@ -40,10 +40,11 @@
                 <label class="layui-form-label" for="codeInput">验证码：</label>
 
                 <div class="layui-input-inline">
-                    <input id="codeInput" type="number" name="code" class="layui-input"
-                           lay-verify="code" placeholder="验证码"
-                           maxlength="4"/><img src="../../static/img/yzm.jpg" onclick="getImage()" title="单击刷新验证码" id="img_rand_code"
-                                               alt="">
+                    <input id="codeInput" type="text" name="code" class="layui-input"
+                           lay-verify="code" placeholder="验证码" style="width: 95px; float: left;"
+                           maxlength="4"/>
+                    <img src="" onclick="getImage()" style="float:right;"
+                         title="单击刷新验证码" id="img_rand_code" alt="单击刷新验证码">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -56,8 +57,8 @@
 
         layui.use(['form', 'layer'], function () {
             var $ = layui.jquery,
-					form = layui.form,
-					layer = layui.layer;
+                form = layui.form,
+                layer = layui.layer;
             // 验证
             form.verify({
                 account: function (value) {
@@ -83,26 +84,33 @@
                     title: '最终的提交信息'
                 });*/
                 $.ajax({
-					type: "POST",
-					url: "/videos/admin/login.do",
-					data: $("#loginForm").serialize(),
-					success: function(result){
-						// console.log(result);
+                    type: "POST",
+                    url: "/videos/admin/login.do",
+                    data: $("#loginForm").serialize(),
+                    success: function (result) {
+                        // console.log(result);
                         if (result.code === 0) {
                             window.location.href = "/videos/html/behind/index.html";
                         } else {
                             layer.alert(result.data);
                         }
-					}
-				});
+                    }
+                });
                 return false;
             })
         });
 
+        $(function(){
+            setTimeout(getImage(), 50);
+        });
+
+        $("#img_rand_code").click(function () {
+            getImage();
+        });
+
         //刷新验证码
         function getImage() {
-//  $("#img_rand_code").attr("src", "" + Date());
-            alert("123");
+            $("#img_rand_code").attr("src", "/videos/getGifCode?date=" + new Date().valueOf());
         }
     </script>
 </body>

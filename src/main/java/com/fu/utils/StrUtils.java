@@ -8,5 +8,6 @@ package com.fu.utils;
 public class StrUtils {
     public static final String LOGIN_ADMIN = "loginAdmin";
     public static final String LOGIN_USER = "loginUser";
+    public static final String LOGIN_CODE = "_code";
 
 }

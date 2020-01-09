@@ -30,7 +30,7 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">
                         <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                        贤心
+                        <span id="adminName"></span>
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a href="">基本资料</a></dd>
@@ -44,7 +44,7 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
                     <li class="layui-nav-item"><a href="./videoList.html" target="myIframe">视频管理</a></li>
                     <li class="layui-nav-item"><a href="" target="myIframe">发布商品</a></li>
                 </ul>
@@ -65,16 +65,19 @@
     </div>
     <script>
         $(function () {
-            verifyLogin();
+            query();
         });
-        function verifyLogin() {
+
+        function query() {
             $.ajax({
                 type: "GET",
-                url: "/videos/admin/verifyLogin.do",
+                url: "/videos/admin/query.do",
                 async: false,
-                success: function(result) {
+                success: function (result) {
                     // console.log(result);
-                    if (result.code !== 0) {
+                    if (result.code === 0) {
+                        $("#adminName").html(result.data)
+                    } else {
                         window.location.href = "/videos/html/behind/login.html";
                     }
                 }

@@ -36,12 +36,12 @@ public class AdminController {
         return "success";
     }
 
-    @GetMapping("/verifyLogin.do")
+    @GetMapping("/query.do")
     @ResponseBody
     public Msg verifyLogin(HttpSession session) {
         Admin admin = (Admin) session.getAttribute(StrUtils.LOGIN_ADMIN);
         if (admin != null) {
-            return new Msg();
+            return new Msg(0, admin);
         }
         return new Msg(1, "还未登录");
     }
@@ -50,7 +50,15 @@ public class AdminController {
     @ResponseBody
     public Msg login(String username, String password, String code, HttpSession session) {
         // 验证码
+        String vCode = (String) session.getAttribute(StrUtils.LOGIN_CODE);
+        if (!vCode.equals(code)) {
+            return new Msg(1, "验证码错误");
+        }
 
+        Admin adminSession = (Admin) session.getAttribute(StrUtils.LOGIN_ADMIN);
+        if (adminSession != null) {
+            return new Msg(1, "您已登录，请勿重复登录");
+        }
         Admin admin = adminService.login(username, password);
         session.setAttribute(StrUtils.LOGIN_ADMIN, admin);
         return new Msg(0, "登录成功");
