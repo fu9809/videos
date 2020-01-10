@@ -63,26 +63,5 @@
             © layui.com - 底部固定区域
         </div>
     </div>
-    <script>
-        $(function () {
-            query();
-        });
-
-        function query() {
-            $.ajax({
-                type: "GET",
-                url: "/videos/admin/query.do",
-                async: false,
-                success: function (result) {
-                    // console.log(result);
-                    if (result.code === 0) {
-                        $("#adminName").html(result.data)
-                    } else {
-                        window.location.href = "/videos/html/behind/login.html";
-                    }
-                }
-            });
-        }
-    </script>
 </body>
 </html>

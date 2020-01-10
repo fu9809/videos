@@ -54,7 +54,7 @@ public class WebmvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(
                         new MappedInterceptor(new String[]{"/**"},
-                        new String[]{"/**/*login.*", "/static/**", "/**/getGifCode"},
+                        new String[]{"/static/**", "/**/getGifCode"},
                         new LoginInterceptor()));
     }
 

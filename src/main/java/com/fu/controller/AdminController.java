@@ -39,7 +39,7 @@ public class AdminController {
     @ResponseBody
     public Msg login(String username, String password, String code, HttpSession session) {
         // 验证码
-        String vCode = (String) session.getAttribute(StrUtils.LOGIN_CODE);
+        String vCode = ((String) session.getAttribute(StrUtils.LOGIN_CODE)).toLowerCase();
         if (!vCode.equals(code)) {
             return new Msg(1, "验证码错误");
         }
@@ -50,6 +50,7 @@ public class AdminController {
         }
         Admin admin = adminService.login(username, password);
         session.setAttribute(StrUtils.LOGIN_ADMIN, admin);
-        return new Msg(0, "登录成功");
+        String beforePage = (String) session.getAttribute(StrUtils.BEFORE_PAGE);
+        return new Msg(0, beforePage);
     }
 }

@@ -54,7 +54,7 @@
         </form>
     </div>
     <script>
-
+        console.log(document.referrer);
         layui.use(['form', 'layer'], function () {
             var $ = layui.jquery,
                 form = layui.form,
@@ -85,12 +85,12 @@
                 });*/
                 $.ajax({
                     type: "POST",
-                    url: "/videos/admin/login.do",
+                    url: "/videos/admin/login.do?referrer=1",
                     data: $("#loginForm").serialize(),
                     success: function (result) {
                         // console.log(result);
                         if (result.code === 0) {
-                            window.location.href = "/videos/html/behind/index.html";
+                            window.location.href = result.data;
                         } else {
                             layer.alert(result.data);
                             getImage();
