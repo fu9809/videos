@@ -25,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             // 证明这是一个ajax请求
             if (value != null && value.equals("XMLHttpRequest")) {
                 return true;
-            } else{
+            } else {
                 response.sendRedirect(request.getContextPath() + "/html/behind/login.html");
             }
             return false;

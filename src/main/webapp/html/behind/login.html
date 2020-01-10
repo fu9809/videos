@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>登录</title>
 
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <link rel="stylesheet" href="../../static/layui/css/layui.css">
-    <script src="../../static/js/jquery-3.4.1.min.js"></script>
-    <script src="../../static/layui/layui.js"></script>
+    <link rel="stylesheet" href="/videos/static/css/style.css">
+    <link rel="stylesheet" href="/videos/static/layui/css/layui.css">
+    <script src="/videos/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/videos/static/layui/layui.js"></script>
 
 </head>
 <body class="body">
@@ -25,7 +25,7 @@
                 <div class="layui-input-inline">
                     <input id="accountInput" type="text" name="username" class="layui-input"
                            lay-verify="account" placeholder="username"
-                           autocomplete="on" maxlength="20"/>
+                           autocomplete="on" maxlength="20" />
                 </div>
             </div>
             <div class="layui-form-item">
@@ -33,7 +33,7 @@
 
                 <div class="layui-input-inline">
                     <input id="passwordInput" type="password" name="password" class="layui-input"
-                           lay-verify="password" placeholder="password" maxlength="20"/>
+                           lay-verify="password" placeholder="password" maxlength="20" autocomplete="off"/>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -42,7 +42,7 @@
                 <div class="layui-input-inline">
                     <input id="codeInput" type="text" name="code" class="layui-input"
                            lay-verify="code" placeholder="验证码" style="width: 95px; float: left;"
-                           maxlength="4"/>
+                           maxlength="4" autocomplete="off"/>
                     <img src="" onclick="getImage()" style="float:right;"
                          title="单击刷新验证码" id="img_rand_code" alt="单击刷新验证码">
                 </div>
@@ -93,6 +93,7 @@
                             window.location.href = "/videos/html/behind/index.html";
                         } else {
                             layer.alert(result.data);
+                            getImage();
                         }
                     }
                 });

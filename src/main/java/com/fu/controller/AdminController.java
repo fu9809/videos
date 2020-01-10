@@ -6,7 +6,6 @@ import com.fu.service.AdminService;
 import com.fu.utils.StrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,16 +33,6 @@ public class AdminController {
         Admin admin = adminService.getAdminById(id);
         System.out.println(admin);
         return "success";
-    }
-
-    @GetMapping("/query.do")
-    @ResponseBody
-    public Msg verifyLogin(HttpSession session) {
-        Admin admin = (Admin) session.getAttribute(StrUtils.LOGIN_ADMIN);
-        if (admin != null) {
-            return new Msg(0, admin);
-        }
-        return new Msg(1, "还未登录");
     }
 
     @RequestMapping("/login.do")
