@@ -1,6 +1,5 @@
 package com.fu.interceptor;
 
-import com.fu.bean.User;
 import com.fu.utils.StrUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -9,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *  登录拦截器
+ *  登录拦截器，返回登录前的页面
  * @Author Administrator
  * @Date 2020/1/7 15:07
  */
@@ -30,26 +29,31 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        if (uri.contains("admin") || uri.contains("behind")) {
-            if (session.getAttribute(StrUtils.LOGIN_ADMIN) != null) {
-                return true;
-            } else {
-                if (referer == null) {
-                    session.setAttribute(StrUtils.BEFORE_PAGE, uri);
-                } else {
-                    session.setAttribute(StrUtils.BEFORE_PAGE, referer);
-                }
-                response.sendRedirect(request.getContextPath() + "/html/behind/login.html");
+        if (session.getAttribute(StrUtils.LOGIN_ADMIN) != null) {
+            return true;
+        } else if (session.getAttribute(StrUtils.LOGIN_USER) != null) {
+            if (uri.contains("admin") || uri.contains("behind")) {
+                response.sendRedirect(request.getContextPath() + "/html/error.html");
                 return false;
+            } else {
+                return true;
             }
+        } else if (uri.contains("admin") || uri.contains("behind")) {
+            if (referer == null) {
+                session.setAttribute(StrUtils.BEFORE_PAGE, uri);
+            } else {
+                session.setAttribute(StrUtils.BEFORE_PAGE, referer);
+            }
+            response.sendRedirect(request.getContextPath() + "/html/behind/login.html");
+            return false;
         } else if (uri.contains("user") || uri.contains("before")) {
-            User user = (User)session.getAttribute(StrUtils.LOGIN_USER);
-            if(user != null) {
-                return true;
+            if (referer == null) {
+                session.setAttribute(StrUtils.BEFORE_PAGE, uri);
             } else {
-                response.sendRedirect(request.getContextPath() + "/html/before/login.html");
-                return false;
+                session.setAttribute(StrUtils.BEFORE_PAGE, referer);
             }
+            response.sendRedirect(request.getContextPath() + "/html/before/login.html");
+            return false;
         }
         response.sendRedirect(referer);
         return false;
