@@ -148,10 +148,6 @@
         </form>
     </div>
     <script>
-
-
-
-
         // 加载省市县三级联动的插件
         layui.config({
             base: '/videos/static/city-picker/'
@@ -183,31 +179,27 @@
                 ,auto: false
                 ,bindAction: "#registerBtn"
                 ,choose: function(obj){ // 选择之后立即执行
-                    $("#imgMsg").css("display", "none");
-                    $("#imgFile").css("display", "block");
                     //预读本地文件示例，不支持ie8
                     obj.preview(function(index, file, result){
                         $('#imgFile').attr('src', result); //图片链接（base64）
                     });
+                    $("#imgMsg").css("display", "none");
+                    $("#imgFile").css("display", "block");
                 }
                 ,before: function(obj){ // 上传之前执行
-                    console.log("=====before");
                     joinAddress();
                     this.data = $("#registerForm").serializeObject();
-                    console.log(this.data);
                 }
                 ,done: function(res){ // 上传请求成功之后
-                    console.log("=====done");
-                    //如果上传失败
                     if(res.code > 0){
                         return layer.msg('上传失败');
+                    } else {
+                        var index = parent.layer.getFrameIndex(window.name); // 得到 iframe 的索引
+                        parent.layer.close(index);  // 调用父类的页面关闭该页面
                     }
-                    //上传成功
                 }
                 ,error: function(){ // 上传请求失败
-                    console.log("=====error");
-                    //演示失败状态，并实现重传
-                    layer.msg("上传过程中出错啦000000000000000");
+                    layer.msg("上传过程中出错啦");
                 }
             });
             //序列化表单

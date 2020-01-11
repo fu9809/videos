@@ -14,4 +14,16 @@
             VALUES (#{email}, #{phoneNum}, #{password}, #{code}, #{nickName}, #{sex}, #{birthday}, #{address}, #{imgUrl}, #{createTime})
     </insert>
 
+    <select id="getUserByEmail" resultType="com.fu.bean.User">
+        select * from user where email = #{email}
+    </select>
+
+    <select id="getUserByPhone" resultType="com.fu.bean.User">
+        select * from user where phoneNum = #{phone}
+    </select>
+
+    <select id="getUserByCode" resultType="com.fu.bean.User">
+        select * from user where code = #{code}
+    </select>
+
 </mapper>

@@ -25,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession(true);
 
-        if (uri.contains("login") || uri.contains("register")) {
+        if (uri.contains("login") || uri.contains("register") || uri.endsWith("getUser.do")) {
             return true;
         }
 
