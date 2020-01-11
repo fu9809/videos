@@ -9,4 +9,9 @@
         select * from user wher id = #{id};
     </select>
 
+    <insert id="addUser" parameterType="com.fu.bean.User">
+        insert into user (email, phoneNum, password, code, nickName, sex, birthday, address, imgUrl, createTime)
+            VALUES (#{email}, #{phoneNum}, #{password}, #{code}, #{nickName}, #{sex}, #{birthday}, #{address}, #{imgUrl}, #{createTime})
+    </insert>
+
 </mapper>

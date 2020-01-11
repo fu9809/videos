@@ -22,9 +22,6 @@
     </resultMap>
 
     <select id="getVideoList" resultMap="videoListMap">
-        <if test="title != null">
-            <bind name="titleBind" value="'%' + title + '%'" />
-        </if>
         select v.id vid, v.title, v.detail, v.time, v.speaker_id, s.id sid, s.speaker_name, c.id cid, c.course_title
             from video v left join speaker s
                 on v.speaker_id = s.id
@@ -32,6 +29,7 @@
                 on v.course_id = c.id
             <where>
                 <if test="title != null and title != '' ">
+                    <bind name="titleBind" value="'%' + title + '%'" />
                     v.title like #{titleBind}
                 </if>
                 <if test="courseId != null and courseId != '' ">

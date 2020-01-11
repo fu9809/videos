@@ -18,7 +18,7 @@ public class CommonExceptionHandler {
     @ResponseBody
     public Msg runtimeExceptionHandler(RuntimeException exception) {
         String message = exception.getMessage();
-
+        exception.printStackTrace();
         return new Msg(1, message);
     }
 }

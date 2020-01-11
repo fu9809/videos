@@ -109,6 +109,13 @@
             <version>6.0.17.Final</version>
         </dependency>
 
+        <!--   密码加密   -->
+        <dependency>
+            <groupId>at.favre.lib</groupId>
+            <artifactId>bcrypt</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+
         <!--    文件上传    -->
         <dependency>
             <groupId>commons-fileupload</groupId>
