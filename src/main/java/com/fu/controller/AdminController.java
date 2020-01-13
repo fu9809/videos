@@ -51,7 +51,7 @@ public class AdminController {
         Admin admin = adminService.login(username, password);
         session.setAttribute(StrUtils.LOGIN_ADMIN, admin);
         String beforePage = (String) session.getAttribute(StrUtils.BEFORE_PAGE);
-        if (beforePage == null || "".equals(beforePage)) {
+        if (beforePage == null || "".equals(beforePage) || beforePage.contains("login")) {
             beforePage = "/videos/html/behind/index.html";
         }
         return new Msg(0, beforePage);

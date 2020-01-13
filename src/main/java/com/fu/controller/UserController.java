@@ -7,12 +7,12 @@ import com.fu.utils.BCryptUtils;
 import com.fu.utils.StrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -27,8 +27,8 @@ public class UserController {
 
     @PostMapping("/register.do")
     @ResponseBody
-    public Msg register(@RequestParam MultipartFile file,
-                        User user, String password2, String captcha, HttpSession session) {
+    public Msg register(User user, String password2, String captcha, HttpSession session) {
+//        System.out.println(user);
         if (!user.getPassword().equals(password2)) {
             return new Msg(1, "两次密码不一致");
         }
@@ -40,21 +40,6 @@ public class UserController {
         String pass = BCryptUtils.encryption(password2);
         user.setPassword(pass);
 
-        String filename = file.getOriginalFilename();
-        String path = "static/upload/";
-        String dir = session.getServletContext().getRealPath("") + path;
-        File dirFile = new File(dir);
-        if (!dirFile.exists()) {
-            dirFile.mkdir();
-        }
-        File newFile = new File(dir, filename);
-        try {
-            file.transferTo(newFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new Msg(1, "文件上传时出错了");
-        }
-        user.setImgUrl("/videos/" + path + filename);
         user.setCreateTime(new Date());
         int num = userService.addUser(user);
         return new Msg(0, num);
@@ -85,13 +70,13 @@ public class UserController {
         if (BCryptUtils.verify(password, user.getPassword())) {
             session.setAttribute(StrUtils.LOGIN_USER, user);
             String beforePage = (String) session.getAttribute(StrUtils.BEFORE_PAGE);
-            if (beforePage == null || "".equals(beforePage)) {
+            if (beforePage == null || "".equals(beforePage) || beforePage.contains("login")) {
                 beforePage = "/videos/html/before/index.html";
             }
+
             return new Msg(0, beforePage);
-        } else {
-            return new Msg(1, "账号或密码错误");
         }
+        return new Msg(1, "账号或密码错误");
     }
 
     @GetMapping("/getUser.do")
@@ -100,10 +85,8 @@ public class UserController {
         User user = (User) session.getAttribute(StrUtils.LOGIN_USER);
         if (user != null) {
             return new Msg(0, user);
-        } else {
-            return new Msg(1, "未登录");
         }
-
+        return new Msg(1, "未登录");
     }
 
 }

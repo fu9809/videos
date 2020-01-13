@@ -1,7 +1,5 @@
 package com.fu.comment;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -10,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Author Administrator
  * @Date 2020/1/7 20:17
  */
-@ControllerAdvice
-@Component
+//@ControllerAdvice
+//@Component
 public class CommonExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)

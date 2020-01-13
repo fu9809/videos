@@ -17,10 +17,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();   // 请求的链接
-        System.out.println(uri);
+//        System.out.println(uri);
         // /videos/admin/login.do
         String referer = request.getHeader("referer"); // 发送请求的所在的页面的全路径
-        System.out.println(referer);
+//        System.out.println(referer);
         // http://localhost:8080/videos/html/behind/login.html
 
         HttpSession session = request.getSession(true);
@@ -33,7 +33,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         } else if (session.getAttribute(StrUtils.LOGIN_USER) != null) {
             if (uri.contains("admin") || uri.contains("behind")) {
-                response.sendRedirect(request.getContextPath() + "/html/error.html");
+                response.sendRedirect(request.getContextPath() + "/html/behind/login.html");
                 return false;
             } else {
                 return true;

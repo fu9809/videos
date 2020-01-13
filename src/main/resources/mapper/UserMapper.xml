@@ -10,8 +10,44 @@
     </select>
 
     <insert id="addUser" parameterType="com.fu.bean.User">
-        insert into user (email, phoneNum, password, code, nickName, sex, birthday, address, imgUrl, createTime)
-            VALUES (#{email}, #{phoneNum}, #{password}, #{code}, #{nickName}, #{sex}, #{birthday}, #{address}, #{imgUrl}, #{createTime})
+        insert into user (
+        code, password, nickName, sex, createTime,
+        <trim suffixOverrides=",">
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="phoneNum != null and phoneNum != ''">
+                phoneNum,
+            </if>
+            <if test="birthday != null and birthday != ''">
+                birthday,
+            </if>
+            <if test="address != null and address != ''">
+                address,
+            </if>
+            <if test="imgUrl != null and imgUrl != ''">
+                imgUrl
+            </if>
+        </trim>
+        ) VALUES (#{code}, #{password}, #{nickName}, #{sex}, #{createTime},
+        <trim suffixOverrides=",">
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="phoneNum != null and phoneNum != ''">
+                #{phoneNum},
+            </if>
+            <if test="birthday != null and birthday != ''">
+                #{birthday},
+            </if>
+            <if test="address != null and address != ''">
+                #{address},
+            </if>
+            <if test="imgUrl != null and imgUrl != ''">
+                #{imgUrl}
+            </if>
+        </trim>
+        )
     </insert>
 
     <select id="getUserByEmail" resultType="com.fu.bean.User">

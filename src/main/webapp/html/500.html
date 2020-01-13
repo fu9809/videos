@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>404</title>
+    <title>500</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -10,8 +10,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
 
-    <link rel="stylesheet" href="/videos/static/layui/css/layui.css">
-    <script src="/videos/static/layui/layui.js"></script>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <script src="./layui/layui.js"></script>
 
     <style>
         .error .clip .shadow {height:180px;}
@@ -21,8 +21,8 @@
         .error h2 {font-size:32px;}
         .error .msg {top:-190px;left:30%;width:80px;height:80px;line-height:80px;font-size:32px;}
         .error span.triangle {top:70%;right:0%;border-left:20px solid #535353;border-top:15px solid transparent;border-bottom:15px solid transparent;}
-        .error .container-error-404 {top: 50%;margin-top: 250px;position:relative;height:250px;padding-top:40px;}
-        .error .container-error-404 .clip {display:inline-block;transform:skew(-45deg);}
+        .error .container-error-500 {top: 50%;margin-top: 250px;position:relative;height:250px;padding-top:40px;}
+        .error .container-error-500 .clip {display:inline-block;transform:skew(-45deg);}
         .error .clip .shadow {overflow:hidden;}
         .error .clip:nth-of-type(2) .shadow {overflow:hidden;position:relative;box-shadow:inset 20px 0px 20px -15px rgba(150,150,150,0.8),20px 0px 20px -15px rgba(150,150,150,0.8);}
         .error .clip:nth-of-type(3) .shadow:after,.error .clip:nth-of-type(1) .shadow:after {content:"";position:absolute;right:-8px;bottom:0px;z-index:9999;height:100%;width:10px;background:linear-gradient(90deg,transparent,rgba(173,173,173,0.8),transparent);border-radius:50%;}
@@ -42,7 +42,7 @@
             .error h2 {font-size:18px;}
             .error .msg {top:-110px;left:15%;width:40px;height:40px;line-height:40px;font-size:18px;}
             .error span.triangle {top:70%;right:-3%;border-left:10px solid #535353;border-top:8px solid transparent;border-bottom:8px solid transparent;}
-            .error .container-error-404 {height:150px;}
+            .error .container-error-500 {height:150px;}
         }
     </style>
 </head>
@@ -50,7 +50,7 @@
     <div class="error">
         <div class="container-floud">
             <div style="text-align: center">
-                <div class="container-error-404">
+                <div class="container-error-500">
                     <div class="clip">
                         <div class="shadow">
                             <span class="digit thirdDigit"></span>
@@ -84,7 +84,7 @@
         loop3 = setInterval(function () {
             if (i > 40) {
                 clearInterval(loop3);
-                document.querySelector('.thirdDigit').textContent = 4;
+                document.querySelector('.thirdDigit').textContent = 5;
             } else {
                 document.querySelector('.thirdDigit').textContent = randomNum();
                 i++;
@@ -102,7 +102,7 @@
         loop1 = setInterval(function () {
             if (i > 100) {
                 clearInterval(loop1);
-                document.querySelector('.firstDigit').textContent = 4;
+                document.querySelector('.firstDigit').textContent = 0;
             } else {
                 document.querySelector('.firstDigit').textContent = randomNum();
                 i++;

@@ -14,7 +14,7 @@
             <div class="layui-logo">视频管理系统</div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href="">视频管理</a></li>
+                <li class="layui-nav-item" ><a href="">视频管理</a></li>
                 <li class="layui-nav-item"><a href="">主讲人管理</a></li>
                 <li class="layui-nav-item"><a href="">课程管理</a></li>
                 <li class="layui-nav-item">
@@ -45,7 +45,7 @@
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                    <li class="layui-nav-item"><a href="./videoList.html" target="myIframe">视频管理</a></li>
+                    <li class="layui-nav-item" ><a href="./videoList.html" target="myIframe" id="videoLi"><span></span>视频管理</a></li>
                     <li class="layui-nav-item"><a href="" target="myIframe">发布商品</a></li>
                 </ul>
             </div>
@@ -63,5 +63,10 @@
             © layui.com - 底部固定区域
         </div>
     </div>
+    <script>
+        $(function() {
+            $("#videoLi").find("span").click();
+        })
+    </script>
 </body>
 </html>

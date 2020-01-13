@@ -32,10 +32,10 @@
                     <bind name="titleBind" value="'%' + title + '%'" />
                     v.title like #{titleBind}
                 </if>
-                <if test="courseId != null and courseId != '' ">
+                <if test="courseId != null and courseId != 0">
                     AND v.course_id = #{courseId}
                 </if>
-                <if test="speakerId != null and speakerId != '' ">
+                <if test="speakerId != null and speakerId != 0">
                     AND v.speaker_id = #{speakerId}
                 </if>
             </where>

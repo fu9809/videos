@@ -52,13 +52,14 @@ public class VideoController {
     @DeleteMapping("/delete.do/{ids}")
     @ResponseBody
     public Msg delete(@PathVariable("ids") String ids) {
-        String[] idArr = ids.split(",");
-        int num = videoService.delete(idArr);
-        if (num > 0) {
-            return new Msg(0, num);
-        } else {
+        int num = 0;
+        /*String[] idArr = ids.split(",");
+        num = videoService.delete(idArr);
+        if (num < 0) {
             return new Msg(1, "你传入的数据有毛病吧，一条都没删除成功");
-        }
+        }*/
+        return new Msg(0, num);
+
     }
 
     @GetMapping("/getVideoById.do/{id}")

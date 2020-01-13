@@ -94,7 +94,7 @@
             <label class="layui-form-label">教师名字</label>
             <div class="layui-input-block">
                 <select name="speakerId" lay-verify="required" lay-search id="speakerSelectAdd">
-
+                    <option value="">请选择</option>
                 </select>
             </div>
         </div>
@@ -103,6 +103,7 @@
             <label class="layui-form-label">所属课程</label>
             <div class="layui-input-block">
                 <select name="courseId" lay-verify="required" lay-search id="courseSelectAdd">
+                    <option value="">请选择</option>
                 </select>
             </div>
         </div>
@@ -410,8 +411,10 @@
                                     ids += (item.id + ",");
                                 }
                             });
-                            // layer.msg("批量删除:" + "[" + ids + "]");
-                            deleteVideo(ids);
+                            layer.confirm("您确定要删除这" + data.length + "条数据吗", function (index) {
+                                deleteVideo(ids);
+                            });
+
                         } else {
                             layer.msg("请先选择要删除的选项");
                         }
@@ -452,25 +455,18 @@
                             // console.log(layero, index);
                             // console.log(data.id);
                             // 主讲人列表
-                            showSpeakerSelect($("#speakerSelectAdd"));
+                            showSpeakerSelect($("#speakerSelectEdit"));
                             // 课程列表
-                            showCourseSelect($("#courseSelectAdd"));
+                            showCourseSelect($("#courseSelectEdit"));
 
                             // 获取要修改的数据回显
                             $.ajax({
                                 type: "GET",
                                 url: "/videos/video/getVideoById.do/" + data.id,
                                 success: function (result) {
-                                    // console.log(result);
+                                    console.log(result);
                                     var data = result.data;
-                                    $("#idInputEdit").val(data.id);
-                                    $("#titleInputEdit").val(data.title);
-                                    $("#speakerSelectEdit").val(data.speakerId);
-                                    $("#courseSelectEdit").val(data.courseId);
-                                    $("#timeInputEdit").val(data.time);
-                                    $("#imageUrlInputEdit").val(data.imageUrl);
-                                    $("#videoUrlInputEdit").val(data.videoUrl);
-                                    $("#detailInputEdit").val(data.detail);
+                                    form.val("editVideoForm", data);
                                 }
                             });
                         }
