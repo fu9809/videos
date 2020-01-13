@@ -16,19 +16,9 @@
         input[type="number"] { -moz-appearance: textfield; }
 
         #registerForm div.layui-input-inline, input { width: 250px; }
-        .register-box {
-            margin: 50px auto;
-            width: 370px;
-        }
-        #imgUrlDiv {
-            height: 116px;
-        }
-        #imgUrlDiv label {
-            display: block;
-            height: 100px;
-            line-height: 78px;
-            text-align: center;
-        }
+        .register-box { margin: 50px auto; width: 370px; }
+        #imgUrlDiv { height: 116px; }
+        #imgUrlDiv label { display: block; height: 100px; line-height: 78px; text-align: center; }
     </style>
 </head>
 <body class="body">
@@ -71,7 +61,7 @@
                 <label class="layui-form-label" for="passwordInput2">确认密码：</label>
                 <div class="layui-input-inline">
                     <input id="passwordInput2" type="password" class="layui-input" name="password2"
-                           lay-verify="required|pass" placeholder="再次输入密码" autocomplete="off"/>
+                           lay-verify="required|pass2" placeholder="再次输入密码" autocomplete="off"/>
                 </div>
                 <p style="display: none; font-size: 14px; color: red; text-align: center" id="passwordMsg">
                     两次输入的密码不一致</p>
@@ -222,6 +212,11 @@
                     // /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?([^\w\s]|[_])).{8,}$/
                     // , '密码必须包含大小写字母和数字和特殊字符，且不能出现空格，8~16位'
                 ],
+                pass2: function (value) {
+                    if ($("#passwordInput1").val() !== value) {
+                        return '两次密码输入不一致';
+                    }
+                },
                 nickName: function(value) {
                     if (value.length > 8) {
                         return '昵称不能超过8个字';
@@ -242,7 +237,7 @@
                 // 拼接地址
                 joinAddress();
                 var data = form.val("registerForm");
-                console.log(data);
+                // console.log(data);
                 if (isUpload) {
                     // 有文件的时候
                     uploadForm(data);
@@ -316,6 +311,25 @@
                 }
             }
 
+            $("#passwordInput1").change(function () {
+                verifyPassword();
+            });
+            $("#passwordInput2").change(function () {
+                verifyPassword();
+            });
+
+            // 验证两次输入密码是否一致
+            function verifyPassword() {
+                var ps1 = $("#passwordInput1").val();
+                var ps2 = $("#passwordInput2").val();
+                if (ps1 === ps2) {
+                    $("#passwordMsg").css("display", "none");
+                    return true;
+                } else {
+                    $("#passwordMsg").css("display", "block");
+                    return false;
+                }
+            }
             // 拼接地址
             function joinAddress() {
                 var cityPicker = $("#city-picker").val();
@@ -330,27 +344,6 @@
             });
         });
 
-        $(function () {
-            $("#passwordInput1").change(function () {
-                verifyPassword();
-            });
-            $("#passwordInput2").change(function () {
-                verifyPassword();
-            });
-
-            // 验证两次输入密码是否一致
-            function verifyPassword() {
-                var ps1 = $("#passwordInput1").val();
-                var ps2 = $("#passwordInput2").val();
-                if (ps1 == ps2) {
-                    $("#passwordMsg").css("display", "none");
-                    return true;
-                } else {
-                    $("#passwordMsg").css("display", "block");
-                    return false;
-                }
-            }
-        });
     </script>
 </body>
 </html>
